@@ -1,0 +1,18 @@
+<app-page-header
+  [section]="data().section"
+  [title]="data().title"
+  [description]="data().description"
+/>
+
+<mat-card appearance="outlined" class="placeholder-card">
+  <mat-card-content>
+    <div class="placeholder-icon" aria-hidden="true">
+      <mat-icon>{{ data().icon }}</mat-icon>
+    </div>
+    <h2>{{ data().notFound ? 'Return to the portal' : 'Phase 1 foundation ready' }}</h2>
+    <p>{{ data().placeholder }}</p>
+    @if (data().notFound) {
+      <a mat-flat-button routerLink="/admin/dashboard">Go to Admin Dashboard</a>
+    }
+  </mat-card-content>
+</mat-card>

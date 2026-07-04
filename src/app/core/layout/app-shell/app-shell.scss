@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+.portal-container {
+  min-height: 100dvh;
+  background: var(--portal-page-background);
+}
+
+.portal-sidebar {
+  width: var(--portal-sidebar-width);
+  border-right: 1px solid var(--portal-border);
+  border-radius: 0;
+  background: var(--portal-surface);
+}
+
+.portal-content {
+  min-height: 100dvh;
+}
+
+.page-content {
+  width: min(100%, var(--portal-content-max));
+  padding: var(--portal-page-gutter);
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  .page-content {
+    padding: var(--portal-page-gutter-mobile);
+  }
+}

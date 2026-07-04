@@ -2,45 +2,110 @@
 
 ## Project Overview
 
-The Internal Enterprise Announcements System is a focused Angular portfolio project for managing internal company communications. It models an admin-facing workflow where enterprise users create, edit, approve, publish, and manage announcements.
+The Internal Enterprise Announcements System is an Angular portfolio project that models how an organization could create, target, publish, and display internal communications. It is designed as a professional internal portal rather than a social feed or marketing site.
 
-This project is intentionally smaller than the Insurance Claims Management Portal. Its purpose is to demonstrate Angular familiarity, enterprise frontend patterns, form validation, workflow states, and design-system consistency.
-
-## Project Goals
-
-- Build a polished enterprise admin workflow in Angular
-- Practice TypeScript, Angular routing, services, and reactive forms
-- Use Angular Material for consistent enterprise UI components
-- Demonstrate validation logic and workflow-driven interface design
-- Keep scope focused and portfolio-sized
-
-## Planned Features
-
-- Create announcement
-- Edit announcement
-- Approval status
-- Category and tag fields
-- Publish and unpublish controls
-- Show in banner toggle
-- Warning when banner is selected without required summary or image content
-- Last edited by metadata
-- Version history section
-- Required field validation
-- Analytics button placeholder
-- Display options dropdown
-
-## Tech Stack
-
-- Frontend: Angular
-- Language: TypeScript
-- UI System: Angular Material / Material Design
-- Data: Mock API or JSON server
-- Version Control: Git and GitHub
+This project complements the Insurance Claims Management Portal by emphasizing Angular, TypeScript, Angular Material, enterprise frontend architecture, workflow design, and SQL-aware data planning.
 
 ## Portfolio Positioning
 
-This project shows enterprise frontend thinking for internal tools, especially in environments where Angular is commonly used, such as insurance, banking, government, universities, and large corporate systems.
+The project supports Bryan Pierre's positioning as a Digital Systems Analyst / Business-Technologist focused on business systems, digital transformation, enterprise workflows, product thinking, UX awareness, analytics, and technical execution.
 
-## Current Status
+## Phase 1 Status
 
-Starter repository created. Implementation will be built after the flagship claims portal foundation is underway.
+Phase 1 establishes the frontend foundation:
+
+- Angular standalone application
+- TypeScript and SCSS
+- Angular Material and CDK
+- Responsive admin/employee application shell
+- Route-based workspace separation
+- Mock Admin/Employee role switching
+- Shared page-header and placeholder-page components
+- Custom Material theme and local design tokens
+- Basic route and shell tests
+
+Announcement models, mock data, forms, tables, metrics, persistence, and workflow behavior are intentionally deferred.
+
+## Tech Stack
+
+- Angular 22
+- TypeScript 6
+- Angular Material
+- Angular CDK
+- RxJS
+- SCSS
+- Vitest
+- npm
+
+## Routes
+
+### Admin
+
+- `/admin/dashboard`
+- `/admin/announcements`
+- `/admin/announcements/new`
+- `/admin/announcements/:id`
+- `/admin/announcements/:id/edit`
+- `/admin/announcements/:id/history`
+
+### Employee
+
+- `/employee/announcements`
+- `/employee/announcements/:id`
+
+The root route redirects to `/admin/dashboard`. Unknown routes display a not-found state inside the shared portal shell.
+
+## Visual Direction
+
+The shell uses Angular Material patterns inspired by [ng-matero](https://github.com/ng-matero/ng-matero), while restrained card and surface styling takes secondary inspiration from [Modernize Angular Free](https://github.com/adminmart/modernize-angular-free).
+
+Neither template is installed, copied, or used as the application foundation. Template branding, sample pages, authentication, permissions, internationalization, dark mode, charts, and unrelated widgets are excluded.
+
+## Material Icons
+
+The application uses Angular Material's `mat-icon` component with the official Material Icons font stylesheet loaded from Google Fonts in `src/index.html`. No external icon package is installed.
+
+## Local Setup
+
+Use Node 24 LTS. The repository includes an `.nvmrc` file for version managers. Angular 22 officially supports Node 26, but the Homebrew Node runtimes available during Phase 1 aborted Angular production builds at process level. The official Node 24.18 distribution installed through `fnm` completed the same build reliably.
+
+With `fnm`:
+
+```bash
+eval "$(fnm env --shell zsh)"
+fnm install
+fnm use
+```
+
+```bash
+npm install
+npm start
+```
+
+Open [http://localhost:4200](http://localhost:4200).
+
+## Validation
+
+```bash
+npm run build
+npm test -- --watch=false
+```
+
+## MVP Exclusions
+
+The MVP does not include:
+
+- Production authentication or advanced permissions
+- Real backend or PostgreSQL implementation
+- MongoDB
+- Cloud deployment
+- Email, SMS, or push notifications
+- Real analytics or charts
+- Rich text editing
+- File attachments
+- Complex approval workflows
+- Template-provided dashboards or sample business domains
+
+## Next Phase
+
+Phase 2 will introduce SQL-shaped TypeScript interfaces, professional mock announcement data, reference data, audience-matching rules, and a service boundary that can later be replaced by an HTTP API.

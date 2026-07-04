@@ -1,0 +1,27 @@
+<mat-toolbar class="portal-toolbar">
+  <div class="toolbar-main">
+    @if (isHandset) {
+      <button mat-icon-button type="button" aria-label="Open navigation" (click)="menuToggle.emit()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    }
+
+    <div class="portal-heading">
+      <strong>Internal Enterprise Announcements</strong>
+      <span>Targeted publishing, lifecycle management, and employee communication</span>
+    </div>
+
+    <span class="toolbar-spacer"></span>
+
+    <mat-button-toggle-group
+      class="role-switcher"
+      aria-label="Portal role"
+      [value]="role"
+      (valueChange)="changeRole($event)"
+      hideSingleSelectionIndicator
+    >
+      <mat-button-toggle value="ADMIN">Admin</mat-button-toggle>
+      <mat-button-toggle value="EMPLOYEE">Employee</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+</mat-toolbar>

@@ -1,0 +1,47 @@
+.placeholder-card {
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  background: var(--portal-surface);
+  border-color: var(--portal-border);
+  border-radius: var(--portal-radius);
+  box-shadow: var(--portal-shadow);
+}
+
+mat-card-content {
+  max-width: 620px;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.placeholder-icon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 18px;
+  place-items: center;
+  color: var(--portal-primary);
+  background: var(--portal-primary-soft);
+  border-radius: 8px;
+
+  mat-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 30px;
+  }
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+p {
+  margin: 10px 0 0;
+  color: var(--portal-text-muted);
+  line-height: 1.6;
+}
+
+a {
+  margin-top: 20px;
+}

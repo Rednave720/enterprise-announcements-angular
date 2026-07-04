@@ -1,0 +1,25 @@
+<mat-sidenav-container class="portal-container">
+  <mat-sidenav
+    #drawer
+    class="portal-sidebar"
+    [mode]="isHandset() ? 'over' : 'side'"
+    [opened]="!isHandset()"
+    [fixedInViewport]="isHandset()"
+    aria-label="Primary navigation"
+  >
+    <app-sidebar [role]="role()" (navigated)="closeMobileDrawer()" />
+  </mat-sidenav>
+
+  <mat-sidenav-content class="portal-content">
+    <app-topbar
+      [isHandset]="isHandset()"
+      [role]="role()"
+      (menuToggle)="toggleDrawer()"
+      (roleChange)="switchRole($event)"
+    />
+
+    <main class="page-content" tabindex="-1">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,34 @@
+<div class="sidebar-shell">
+  <div class="brand-block">
+    <div class="brand-mark" aria-hidden="true">
+      <mat-icon>campaign</mat-icon>
+    </div>
+    <div>
+      <strong>Enterprise Comms</strong>
+      <span>Internal portal</span>
+    </div>
+  </div>
+
+  <div class="workspace-label">
+    <span>Workspace</span>
+    <strong>{{ role === 'ADMIN' ? 'Communications Admin' : 'Employee Portal' }}</strong>
+  </div>
+
+  <mat-nav-list aria-label="Workspace navigation">
+    @for (item of navigationItems; track item.route) {
+      <a
+        mat-list-item
+        [routerLink]="item.route"
+        routerLinkActive
+        [class.active-link]="isActive(item)"
+        [attr.aria-current]="isActive(item) ? 'page' : null"
+        (click)="navigated.emit()"
+      >
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label }}</span>
+      </a>
+    }
+  </mat-nav-list>
+
+  <div class="mode-label">{{ role === 'ADMIN' ? 'Admin mode' : 'Employee mode' }}</div>
+</div>
