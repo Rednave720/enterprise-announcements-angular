@@ -10,9 +10,9 @@ This project complements the Insurance Claims Management Portal by emphasizing A
 
 The project supports Bryan Pierre's positioning as a Digital Systems Analyst / Business-Technologist focused on business systems, digital transformation, enterprise workflows, product thinking, UX awareness, analytics, and technical execution.
 
-## Phase 1 Status
+## Phase Status
 
-Phase 1 establishes the frontend foundation:
+Phase 1 established the frontend foundation:
 
 - Angular standalone application
 - TypeScript and SCSS
@@ -24,7 +24,16 @@ Phase 1 establishes the frontend foundation:
 - Custom Material theme and local design tokens
 - Basic route and shell tests
 
-Announcement models, mock data, forms, tables, metrics, persistence, and workflow behavior are intentionally deferred.
+Phase 2 adds the data and service foundation:
+
+- SQL-shaped announcement, audience, user-status, version-history, user, and reference-data models
+- Ten professional mock announcements spanning the planned statuses, priorities, and types
+- Audience targeting with OR logic within dimensions and AND logic across dimensions
+- Observable announcement, audience, user-status, mock-user, and reference-data services
+- Employee eligibility, banner visibility, dashboard summary, filtering, and lifecycle transition rules
+- Focused business-rule tests
+
+Dashboard UI, tables, forms, employee feeds, backend integration, and persistence remain intentionally deferred.
 
 ## Tech Stack
 
@@ -108,4 +117,4 @@ The MVP does not include:
 
 ## Next Phase
 
-Phase 2 will introduce SQL-shaped TypeScript interfaces, professional mock announcement data, reference data, audience-matching rules, and a service boundary that can later be replaced by an HTTP API.
+Phase 3 can build the admin dashboard and announcement management table against the Phase 2 service boundary without importing mock arrays into components.
