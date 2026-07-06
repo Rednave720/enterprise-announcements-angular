@@ -40,6 +40,8 @@ export interface Audience {
   readonly userGroupIds: readonly string[];
 }
 
+export type AudienceSelection = Omit<Audience, 'id' | 'announcementId'>;
+
 export interface UserAnnouncementStatus {
   readonly id: string;
   readonly userId: string;

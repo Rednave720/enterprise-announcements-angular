@@ -1,17 +1,37 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, map, of } from 'rxjs';
 import { MOCK_AUDIENCES } from '../../../core/data/mock-announcement-data';
 import { MockUser } from '../../../core/models/reference-data.models';
-import { Audience } from '../models/announcement.models';
+import { Audience, AudienceSelection } from '../models/announcement.models';
 
 @Injectable({ providedIn: 'root' })
 export class AudienceService {
+  private readonly audiencesSubject = new BehaviorSubject<readonly Audience[]>([...MOCK_AUDIENCES]);
+
   getAllAudiences(): Observable<readonly Audience[]> {
-    return of(MOCK_AUDIENCES);
+    return this.audiencesSubject.asObservable();
   }
 
   getAudienceForAnnouncement(announcementId: string): Observable<Audience | undefined> {
-    return of(MOCK_AUDIENCES.find((audience) => audience.announcementId === announcementId));
+    return this.audiencesSubject.pipe(
+      map((audiences) => audiences.find((audience) => audience.announcementId === announcementId)),
+    );
+  }
+
+  upsertAudience(announcementId: string, selection: AudienceSelection): Observable<Audience> {
+    const audiences = this.audiencesSubject.value;
+    const existing = audiences.find((audience) => audience.announcementId === announcementId);
+    const audience: Audience = {
+      id: existing?.id ?? `aud-${crypto.randomUUID()}`,
+      announcementId,
+      ...selection,
+    };
+    this.audiencesSubject.next(
+      existing
+        ? audiences.map((item) => item.id === existing.id ? audience : item)
+        : [...audiences, audience],
+    );
+    return of(audience);
   }
 
   matchesUser(audience: Audience | undefined, user: MockUser): boolean {
@@ -28,7 +48,7 @@ export class AudienceService {
   }
 
   matchesAnnouncement(announcementId: string, user: MockUser): boolean {
-    const audience = MOCK_AUDIENCES.find((item) => item.announcementId === announcementId);
+    const audience = this.audiencesSubject.value.find((item) => item.announcementId === announcementId);
     return this.matchesUser(audience, user);
   }
 

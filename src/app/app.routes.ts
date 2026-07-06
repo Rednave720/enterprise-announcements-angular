@@ -21,25 +21,13 @@ export const routes: Routes = [
       },
       {
         path: 'admin/announcements/new',
-        component: PlaceholderPage,
-        data: {
-          section: 'Announcement management',
-          title: 'Create Announcement',
-          description: 'Prepare a targeted internal announcement for review or publication.',
-          icon: 'edit_note',
-          placeholder: 'The reactive create and edit workflow arrives in Phase 4.',
-        },
+        loadComponent: () => import('./features/admin/announcement-form/announcement-form')
+          .then((module) => module.AnnouncementForm),
       },
       {
         path: 'admin/announcements/:id/edit',
-        component: PlaceholderPage,
-        data: {
-          section: 'Announcement management',
-          title: 'Edit Announcement',
-          description: 'Update announcement content, audience, schedule, and display settings.',
-          icon: 'edit',
-          placeholder: 'The reactive create and edit workflow arrives in Phase 4.',
-        },
+        loadComponent: () => import('./features/admin/announcement-form/announcement-form')
+          .then((module) => module.AnnouncementForm),
       },
       {
         path: 'admin/announcements/:id/history',
@@ -54,14 +42,8 @@ export const routes: Routes = [
       },
       {
         path: 'admin/announcements/:id',
-        component: PlaceholderPage,
-        data: {
-          section: 'Announcement management',
-          title: 'Announcement Detail',
-          description: 'Review content, audience, publishing configuration, and employee presentation.',
-          icon: 'article',
-          placeholder: 'Announcement detail and employee preview arrive in Phase 4.',
-        },
+        loadComponent: () => import('./features/admin/announcement-detail/announcement-detail')
+          .then((module) => module.AnnouncementDetail),
       },
       {
         path: 'employee/announcements',

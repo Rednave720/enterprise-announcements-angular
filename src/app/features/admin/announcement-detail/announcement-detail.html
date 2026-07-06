@@ -1,0 +1,42 @@
+<app-page-header
+  section="Announcement management"
+  title="Announcement Detail"
+  description="Review employee-facing content, targeting, and publishing configuration."
+/>
+
+@if (detail$ | async; as detail) {
+  @if (detail.announcement; as announcement) {
+    <div class="detail-actions">
+      <a mat-button routerLink="/admin/announcements"><mat-icon>arrow_back</mat-icon>Announcements</a>
+      <a mat-flat-button [routerLink]="['/admin/announcements', announcement.id, 'edit']">
+        <mat-icon>edit</mat-icon>Edit Announcement
+      </a>
+    </div>
+
+    <section class="detail-card">
+      <div class="detail-header">
+        <div class="labels">
+          <app-type-chip [type]="announcement.type" />
+          <app-priority-badge [priority]="announcement.priority" />
+          <app-status-chip [status]="announcement.status" />
+        </div>
+        <h2>{{ announcement.title }}</h2>
+        <p>{{ announcement.summary }}</p>
+      </div>
+      <div class="detail-body"><p>{{ announcement.body }}</p></div>
+      <dl>
+        <div><dt>Audience</dt><dd>{{ detail.audience }}</dd></div>
+        <div><dt>Publish Date</dt><dd>{{ announcement.publishAt ? (announcement.publishAt | date: 'MMM d, y') : 'Not scheduled' }}</dd></div>
+        <div><dt>Expiration Date</dt><dd>{{ announcement.expireAt ? (announcement.expireAt | date: 'MMM d, y') : 'No expiration' }}</dd></div>
+        <div><dt>Display</dt><dd>{{ announcement.showInBanner ? 'Banner' : '' }}{{ announcement.showInBanner && announcement.showInNotificationCenter ? ' and ' : '' }}{{ announcement.showInNotificationCenter ? 'Notification Center' : '' }}</dd></div>
+        <div><dt>Acknowledgement</dt><dd>{{ announcement.acknowledgementRequired ? 'Required' : 'Not required' }}</dd></div>
+        <div><dt>Last Edited</dt><dd>{{ announcement.updatedAt | date: 'MMM d, y' }}</dd></div>
+      </dl>
+    </section>
+  } @else {
+    <section class="detail-card unavailable" role="alert">
+      <mat-icon>error_outline</mat-icon><strong>Announcement not found</strong>
+      <a mat-stroked-button routerLink="/admin/announcements">Return to announcements</a>
+    </section>
+  }
+}

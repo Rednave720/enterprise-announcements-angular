@@ -43,7 +43,16 @@ Phase 3 adds the first operational admin screens:
 - Audience descriptions built from typed targeting and reference data
 - Route-level lazy loading for the Material-heavy admin screens
 
-Create/edit forms, announcement detail, employee feeds, backend integration, and persistence remain intentionally deferred.
+Phase 4 adds the admin authoring workflow:
+
+- Shared reactive form for create and edit routes
+- Content, audience, schedule, and display-setting sections
+- Conditional banner, scheduling, date-range, and display-location validation
+- Live employee announcement preview
+- Service-backed announcement and audience saves
+- Lightweight read-only detail page with coherent Edit navigation
+
+Employee feeds, version-history UI, backend integration, and persistence remain intentionally deferred.
 
 ## Tech Stack
 
@@ -127,4 +136,4 @@ The MVP does not include:
 
 ## Next Phase
 
-Phase 4 can build the reactive create/edit announcement workflow and admin detail view against the existing typed service boundary.
+Phase 5 can build the targeted employee announcement feed, critical banner, employee detail, and acknowledgement interactions against the existing eligibility services.

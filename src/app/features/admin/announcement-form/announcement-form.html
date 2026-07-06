@@ -1,0 +1,210 @@
+<app-page-header
+  section="Announcement management"
+  [title]="pageTitle()"
+  [description]="pageDescription()"
+/>
+
+@if (isLoading()) {
+  <div class="loading-state" role="status" aria-label="Loading announcement"><mat-spinner diameter="38" /></div>
+} @else if (loadError()) {
+  <section class="message-card error-message" role="alert">
+    <mat-icon aria-hidden="true">error_outline</mat-icon>
+    <div><strong>Announcement unavailable</strong><p>{{ loadError() }}</p></div>
+    <a mat-stroked-button routerLink="/admin/announcements">Return to announcements</a>
+  </section>
+} @else {
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="form-workspace">
+      <div class="form-sections">
+        <section class="operational-card" aria-labelledby="content-heading">
+          <div class="section-heading">
+            <span class="section-icon" aria-hidden="true"><mat-icon>article</mat-icon></span>
+            <div><h2 id="content-heading">Content</h2><p>Write the employee-facing announcement message.</p></div>
+          </div>
+          <div class="section-body field-grid">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Title</mat-label>
+              <input matInput formControlName="title" maxlength="120" />
+              <mat-hint align="end">{{ form.controls.title.value.length }}/120</mat-hint>
+              @if (showError('title')) {
+                <mat-error>Enter a title between 5 and 120 characters.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Summary</mat-label>
+              <textarea matInput formControlName="summary" rows="2"></textarea>
+              <mat-hint>Required for banner display.</mat-hint>
+              @if (form.hasError('bannerSummaryRequired') && (form.controls.summary.touched || submitted())) {
+                <mat-error>Add a summary before enabling the banner.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Body</mat-label>
+              <textarea matInput formControlName="body" rows="7"></textarea>
+              @if (showError('body')) { <mat-error>Announcement body is required.</mat-error> }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Type</mat-label>
+              <mat-select formControlName="type">
+                @for (type of types; track type) { <mat-option [value]="type">{{ label(type) }}</mat-option> }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Priority</mat-label>
+              <mat-select formControlName="priority">
+                @for (priority of priorities; track priority) {
+                  <mat-option [value]="priority">{{ label(priority) }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </section>
+
+        <section class="operational-card" aria-labelledby="audience-heading">
+          <div class="section-heading">
+            <span class="section-icon" aria-hidden="true"><mat-icon>groups</mat-icon></span>
+            <div><h2 id="audience-heading">Audience</h2><p>Leave a dimension empty to include all values in that dimension.</p></div>
+          </div>
+          <div class="section-body field-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Departments</mat-label>
+              <mat-select formControlName="departmentIds" multiple>
+                @for (option of references.departments; track option.id) {
+                  <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Roles</mat-label>
+              <mat-select formControlName="roleIds" multiple>
+                @for (option of references.roles; track option.id) {
+                  <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Locations</mat-label>
+              <mat-select formControlName="locationIds" multiple>
+                @for (option of references.locations; track option.id) {
+                  <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>User Groups</mat-label>
+              <mat-select formControlName="userGroupIds" multiple>
+                @for (option of references.groups; track option.id) {
+                  <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </section>
+
+        <section class="operational-card" aria-labelledby="schedule-heading">
+          <div class="section-heading">
+            <span class="section-icon" aria-hidden="true"><mat-icon>event</mat-icon></span>
+            <div><h2 id="schedule-heading">Publishing Schedule</h2><p>Set the lifecycle state and optional visibility window.</p></div>
+          </div>
+          <div class="section-body field-grid schedule-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Status</mat-label>
+              <mat-select formControlName="status">
+                @for (status of statuses; track status) { <mat-option [value]="status">{{ label(status) }}</mat-option> }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Publish Date</mat-label>
+              <input matInput type="date" formControlName="publishDate" />
+              @if (showFormError('scheduledPublishRequired')) {
+                <mat-error>Scheduled announcements require a publish date.</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Expiration Date</mat-label>
+              <input matInput type="date" formControlName="expireDate" />
+              @if (showFormError('invalidDateRange')) {
+                <mat-error>Expiration must be after the publish date.</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </section>
+
+        <section class="operational-card" aria-labelledby="display-heading">
+          <div class="section-heading">
+            <span class="section-icon" aria-hidden="true"><mat-icon>dashboard_customize</mat-icon></span>
+            <div><h2 id="display-heading">Display Settings</h2><p>Choose where employees see the announcement and whether action is required.</p></div>
+          </div>
+          <div class="section-body settings-grid">
+            <mat-checkbox formControlName="showInBanner">
+              <span class="setting-copy"><strong>Show in Banner</strong><small>Display prominently above the employee feed.</small></span>
+            </mat-checkbox>
+            <mat-checkbox formControlName="showInNotificationCenter">
+              <span class="setting-copy"><strong>Notification Center</strong><small>Include in the standard employee announcement feed.</small></span>
+            </mat-checkbox>
+            <mat-checkbox formControlName="acknowledgementRequired">
+              <span class="setting-copy"><strong>Acknowledgement Required</strong><small>Ask employees to confirm they reviewed the message.</small></span>
+            </mat-checkbox>
+          </div>
+          @if (showFormError('displayLocationRequired')) {
+            <p class="section-error" role="alert">Select Banner or Notification Center as a display location.</p>
+          }
+        </section>
+
+        @if (saveError()) {
+          <div class="save-error" role="alert"><mat-icon>error_outline</mat-icon>{{ saveError() }}</div>
+        }
+
+        <div class="form-actions">
+          <a mat-button routerLink="/admin/announcements">Cancel</a>
+          <button mat-flat-button type="submit" [disabled]="isSaving()">
+            @if (isSaving()) { <mat-spinner diameter="18" /> } @else { <mat-icon>save</mat-icon> }
+            {{ isEditMode ? 'Update Announcement' : 'Create Announcement' }}
+          </button>
+        </div>
+      </div>
+
+      <aside class="preview-column" aria-labelledby="preview-heading">
+        <div class="preview-card">
+          <div class="preview-heading">
+            <div><span>Employee preview</span><h2 id="preview-heading">Announcement Preview</h2></div>
+            <mat-icon aria-hidden="true">visibility</mat-icon>
+          </div>
+
+          @if (preview().showInBanner) {
+            <div class="banner-preview"><mat-icon>campaign</mat-icon>Banner announcement</div>
+          }
+
+          <div class="preview-content">
+            <div class="preview-labels">
+              <app-type-chip [type]="preview().type" />
+              <app-priority-badge [priority]="preview().priority" />
+            </div>
+            <h3>{{ preview().title || 'Announcement title' }}</h3>
+            <p class="preview-summary">{{ preview().summary || 'A concise employee-facing summary will appear here.' }}</p>
+            <p class="preview-body">{{ preview().body || 'The announcement message will appear here as content is entered.' }}</p>
+
+            <dl>
+              <div><dt>Status</dt><dd><app-status-chip [status]="preview().status" /></dd></div>
+              <div><dt>Publish</dt><dd>{{ preview().publishDate ? (preview().publishDate | date: 'MMM d, y') : 'Not scheduled' }}</dd></div>
+              <div><dt>Expires</dt><dd>{{ preview().expireDate ? (preview().expireDate | date: 'MMM d, y') : 'No expiration' }}</dd></div>
+            </dl>
+
+            <div class="preview-indicators">
+              @if (preview().showInNotificationCenter) {
+                <span><mat-icon>notifications</mat-icon>Notification Center</span>
+              }
+              @if (preview().acknowledgementRequired) {
+                <span><mat-icon>fact_check</mat-icon>Acknowledgement required</span>
+              }
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </form>
+}
