@@ -1,0 +1,29 @@
+.empty-state {
+  display: grid;
+  justify-items: center;
+  padding: 48px 24px;
+  color: var(--portal-text-muted);
+  text-align: center;
+}
+
+.icon-wrap {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 14px;
+  color: var(--portal-primary);
+  background: var(--portal-primary-soft);
+  border-radius: 8px;
+  place-items: center;
+}
+
+strong {
+  color: var(--portal-text);
+  font-size: 1rem;
+}
+
+p {
+  max-width: 440px;
+  margin: 6px 0 0;
+  line-height: 1.5;
+}

@@ -6,6 +6,10 @@ import { Audience } from '../models/announcement.models';
 
 @Injectable({ providedIn: 'root' })
 export class AudienceService {
+  getAllAudiences(): Observable<readonly Audience[]> {
+    return of(MOCK_AUDIENCES);
+  }
+
   getAudienceForAnnouncement(announcementId: string): Observable<Audience | undefined> {
     return of(MOCK_AUDIENCES.find((audience) => audience.announcementId === announcementId));
   }

@@ -1,0 +1,134 @@
+<app-page-header
+  section="Announcement management"
+  title="Announcements"
+  description="Search, filter, and review internal communications across their publishing lifecycle."
+/>
+
+<section class="operational-card" aria-labelledby="management-heading">
+  <div class="card-heading">
+    <div>
+      <h2 id="management-heading">Announcement Management</h2>
+      <p>{{ dataSource.data.length }} matching announcements</p>
+    </div>
+  </div>
+
+  <div class="filter-bar" aria-label="Announcement filters">
+    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+      <mat-label>Search announcements</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [formControl]="searchControl" placeholder="Title, summary, or body" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Status</mat-label>
+      <mat-select [formControl]="statusControl" aria-label="Filter by status">
+        <mat-option value="ALL">All statuses</mat-option>
+        @for (status of statuses; track status) {
+          <mat-option [value]="status">{{ filterLabel(status) }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Priority</mat-label>
+      <mat-select [formControl]="priorityControl" aria-label="Filter by priority">
+        <mat-option value="ALL">All priorities</mat-option>
+        @for (priority of priorities; track priority) {
+          <mat-option [value]="priority">{{ filterLabel(priority) }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Type</mat-label>
+      <mat-select [formControl]="typeControl" aria-label="Filter by type">
+        <mat-option value="ALL">All types</mat-option>
+        @for (type of types; track type) {
+          <mat-option [value]="type">{{ filterLabel(type) }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-button type="button" class="clear-button" (click)="clearFilters()">
+      <mat-icon>filter_alt_off</mat-icon>
+      Clear
+    </button>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading-state" role="status" aria-label="Loading announcements"><mat-spinner diameter="36" /></div>
+  } @else if (dataSource.data.length) {
+    <div class="table-scroll">
+      <table mat-table [dataSource]="dataSource" aria-label="Announcements management table">
+        <ng-container matColumnDef="announcement">
+          <th mat-header-cell *matHeaderCellDef>Announcement</th>
+          <td mat-cell *matCellDef="let announcement">
+            <div class="announcement-cell">
+              <strong>{{ announcement.title }}</strong>
+              <span>{{ announcement.summary }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let announcement"><app-type-chip [type]="announcement.type" /></td>
+        </ng-container>
+
+        <ng-container matColumnDef="priority">
+          <th mat-header-cell *matHeaderCellDef>Priority</th>
+          <td mat-cell *matCellDef="let announcement"><app-priority-badge [priority]="announcement.priority" /></td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let announcement"><app-status-chip [status]="announcement.status" /></td>
+        </ng-container>
+
+        <ng-container matColumnDef="audience">
+          <th mat-header-cell *matHeaderCellDef>Audience</th>
+          <td mat-cell *matCellDef="let announcement" class="audience-cell">{{ audienceLabel(announcement.id) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="publishAt">
+          <th mat-header-cell *matHeaderCellDef>Publish Date</th>
+          <td mat-cell *matCellDef="let announcement">
+            {{ announcement.publishAt ? (announcement.publishAt | date: 'MMM d, y') : 'Not scheduled' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="updatedAt">
+          <th mat-header-cell *matHeaderCellDef>Last Edited</th>
+          <td mat-cell *matCellDef="let announcement">{{ announcement.updatedAt | date: 'MMM d, y' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let announcement">
+            <div class="row-actions">
+              <a mat-icon-button [routerLink]="['/admin/announcements', announcement.id]"
+                [attr.aria-label]="'View ' + announcement.title" matTooltip="View announcement">
+                <mat-icon>visibility</mat-icon>
+              </a>
+              <a mat-icon-button [routerLink]="['/admin/announcements', announcement.id, 'edit']"
+                [attr.aria-label]="'Edit ' + announcement.title" matTooltip="Edit announcement">
+                <mat-icon>edit</mat-icon>
+              </a>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+      aria-label="Select announcements page" />
+  } @else {
+    <app-empty-state
+      icon="search_off"
+      title="No announcements found"
+      description="Adjust or clear the filters to return to the full announcement list."
+    />
+  }
+</section>

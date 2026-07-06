@@ -24,7 +24,7 @@ Phase 1 established the frontend foundation:
 - Custom Material theme and local design tokens
 - Basic route and shell tests
 
-Phase 2 adds the data and service foundation:
+Phase 2 added the data and service foundation:
 
 - SQL-shaped announcement, audience, user-status, version-history, user, and reference-data models
 - Ten professional mock announcements spanning the planned statuses, priorities, and types
@@ -33,7 +33,17 @@ Phase 2 adds the data and service foundation:
 - Employee eligibility, banner visibility, dashboard summary, filtering, and lifecycle transition rules
 - Focused business-rule tests
 
-Dashboard UI, tables, forms, employee feeds, backend integration, and persistence remain intentionally deferred.
+Phase 3 adds the first operational admin screens:
+
+- Responsive 3x2 dashboard summary sourced from the announcement service
+- Recently updated announcements table
+- Searchable and filterable announcement management table
+- Client-side pagination and responsive table scrolling
+- Distinct status, priority, and type labels
+- Audience descriptions built from typed targeting and reference data
+- Route-level lazy loading for the Material-heavy admin screens
+
+Create/edit forms, announcement detail, employee feeds, backend integration, and persistence remain intentionally deferred.
 
 ## Tech Stack
 
@@ -117,4 +127,4 @@ The MVP does not include:
 
 ## Next Phase
 
-Phase 3 can build the admin dashboard and announcement management table against the Phase 2 service boundary without importing mock arrays into components.
+Phase 4 can build the reactive create/edit announcement workflow and admin detail view against the existing typed service boundary.

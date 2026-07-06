@@ -11,25 +11,13 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'admin/dashboard' },
       {
         path: 'admin/dashboard',
-        component: PlaceholderPage,
-        data: {
-          section: 'Admin workspace',
-          title: 'Admin Dashboard',
-          description: 'Operational overview for internal communications managers.',
-          icon: 'dashboard',
-          placeholder: 'Dashboard metrics and recently updated announcements arrive in Phase 3.',
-        },
+        loadComponent: () => import('./features/admin/dashboard/admin-dashboard')
+          .then((module) => module.AdminDashboard),
       },
       {
         path: 'admin/announcements',
-        component: PlaceholderPage,
-        data: {
-          section: 'Announcement management',
-          title: 'Announcements',
-          description: 'Manage announcement content, lifecycle, targeting, and publishing state.',
-          icon: 'campaign',
-          placeholder: 'The searchable announcement management table arrives in Phase 3.',
-        },
+        loadComponent: () => import('./features/admin/announcements-management/announcements-management')
+          .then((module) => module.AnnouncementsManagement),
       },
       {
         path: 'admin/announcements/new',

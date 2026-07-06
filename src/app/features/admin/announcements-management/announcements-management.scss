@@ -1,0 +1,145 @@
+.operational-card {
+  overflow: hidden;
+  background: var(--portal-surface);
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+  box-shadow: var(--portal-shadow);
+}
+
+.card-heading {
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--portal-border);
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.card-heading p {
+  margin: 5px 0 0;
+  color: var(--portal-text-muted);
+  font-size: 0.82rem;
+}
+
+.filter-bar {
+  display: grid;
+  grid-template-columns: minmax(260px, 1.7fr) repeat(3, minmax(150px, 1fr)) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--portal-border);
+}
+
+.filter-bar mat-form-field {
+  width: 100%;
+}
+
+.clear-button {
+  white-space: nowrap;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 1100px;
+  table-layout: fixed;
+}
+
+.mat-column-announcement { width: 245px; }
+.mat-column-type { width: 160px; }
+.mat-column-priority { width: 105px; }
+.mat-column-status { width: 120px; }
+.mat-column-audience { width: 145px; }
+.mat-column-publishAt { width: 115px; }
+.mat-column-updatedAt { width: 105px; }
+.mat-column-action { width: 96px; }
+
+th.mat-mdc-header-cell {
+  color: #475467;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: #f8fafc;
+}
+
+td.mat-mdc-cell {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  color: #475467;
+  border-color: #eaecf0;
+}
+
+.announcement-cell {
+  display: grid;
+  width: 270px;
+  gap: 4px;
+}
+
+.announcement-cell strong {
+  color: var(--portal-text);
+  font-size: 0.86rem;
+}
+
+.announcement-cell span {
+  overflow: hidden;
+  color: var(--portal-text-muted);
+  font-size: 0.76rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.audience-cell {
+  max-width: 240px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.row-actions {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.loading-state {
+  display: grid;
+  min-height: 360px;
+  place-items: center;
+}
+
+mat-paginator {
+  border-top: 1px solid var(--portal-border);
+}
+
+@media (max-width: 1199px) {
+  .filter-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .search-field {
+    grid-column: 1 / -1;
+  }
+
+  .clear-button {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 599px) {
+  .card-heading {
+    padding: 18px;
+  }
+
+  .filter-bar {
+    grid-template-columns: 1fr;
+    padding: 16px 18px;
+  }
+
+  .search-field {
+    grid-column: auto;
+  }
+}
