@@ -52,7 +52,16 @@ Phase 4 adds the admin authoring workflow:
 - Service-backed announcement and audience saves
 - Lightweight read-only detail page with coherent Edit navigation
 
-Employee feeds, version-history UI, backend integration, and persistence remain intentionally deferred.
+Phase 5 adds the employee-facing experience:
+
+- Targeted employee announcement feed sourced from service eligibility rules
+- Critical/pinned banner area for urgent or acknowledgement-required messages
+- Priority and type filters with clear empty states
+- Employee announcement detail view
+- Read, dismiss, and acknowledgement actions stored through the user-status service
+- Route-level lazy loading for employee screens
+
+Version-history UI, backend integration, and persistence remain intentionally deferred.
 
 ## Tech Stack
 
@@ -136,4 +145,4 @@ The MVP does not include:
 
 ## Next Phase
 
-Phase 5 can build the targeted employee announcement feed, critical banner, employee detail, and acknowledgement interactions against the existing eligibility services.
+Phase 6 can polish the admin detail/version-history experience, tighten final screenshots, and prepare the project README/case-study materials before considering any backend integration.

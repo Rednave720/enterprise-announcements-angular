@@ -1,0 +1,163 @@
+.detail-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.ack-panel,
+.success-message,
+.unavailable {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  border-radius: var(--portal-radius);
+}
+
+.ack-panel {
+  color: #93370d;
+  background: #fffaeb;
+  border: 1px solid #fedf89;
+}
+
+.ack-panel.complete,
+.success-message {
+  color: #067647;
+  background: #ecfdf3;
+  border: 1px solid #abefc6;
+}
+
+.ack-panel div {
+  flex: 1;
+}
+
+.ack-panel strong,
+.unavailable strong {
+  display: block;
+  margin-bottom: 3px;
+}
+
+.ack-panel p,
+.unavailable p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.detail-card,
+.unavailable {
+  background: var(--portal-surface);
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+  box-shadow: var(--portal-shadow);
+}
+
+.detail-card header,
+.body-copy,
+.detail-card footer {
+  padding: 26px;
+}
+
+.detail-card header,
+.body-copy {
+  border-bottom: 1px solid var(--portal-border);
+}
+
+.labels,
+.published,
+.detail-card footer,
+.unread-label {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.labels {
+  margin-bottom: 20px;
+}
+
+.unread-label {
+  gap: 6px;
+  color: var(--portal-primary);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.unread-label span {
+  width: 7px;
+  height: 7px;
+  background: currentcolor;
+  border-radius: 50%;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 1.65rem;
+  line-height: 1.25;
+}
+
+.summary {
+  max-width: 900px;
+  margin: 0 0 18px;
+  color: #475467;
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.published,
+.detail-card footer {
+  color: var(--portal-text-muted);
+  font-size: 0.8rem;
+}
+
+.published mat-icon,
+.detail-card footer mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.body-copy p {
+  max-width: 900px;
+  margin: 0;
+  color: #344054;
+  line-height: 1.75;
+  white-space: pre-line;
+}
+
+.detail-card footer span {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.unavailable {
+  align-items: flex-start;
+}
+
+.unavailable a {
+  margin-left: auto;
+}
+
+@media (max-width: 599px) {
+  .detail-actions,
+  .ack-panel,
+  .unavailable {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ack-panel button,
+  .unavailable a {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .detail-card header,
+  .body-copy,
+  .detail-card footer {
+    padding: 20px;
+  }
+}

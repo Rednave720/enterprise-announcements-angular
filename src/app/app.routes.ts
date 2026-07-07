@@ -47,25 +47,13 @@ export const routes: Routes = [
       },
       {
         path: 'employee/announcements',
-        component: PlaceholderPage,
-        data: {
-          section: 'Employee portal',
-          title: 'Employee Announcements',
-          description: 'View active internal communications that are relevant to the current employee.',
-          icon: 'notifications',
-          placeholder: 'The targeted employee feed and critical banner arrive in Phase 5.',
-        },
+        loadComponent: () => import('./features/employee/announcements-feed/announcements-feed')
+          .then((module) => module.AnnouncementsFeed),
       },
       {
         path: 'employee/announcements/:id',
-        component: PlaceholderPage,
-        data: {
-          section: 'Employee portal',
-          title: 'Announcement Detail',
-          description: 'Read announcement content and complete any required acknowledgement.',
-          icon: 'mark_email_read',
-          placeholder: 'Employee read, dismiss, and acknowledgement states arrive in Phase 5.',
-        },
+        loadComponent: () => import('./features/employee/announcement-detail/employee-announcement-detail')
+          .then((module) => module.EmployeeAnnouncementDetail),
       },
       {
         path: '**',

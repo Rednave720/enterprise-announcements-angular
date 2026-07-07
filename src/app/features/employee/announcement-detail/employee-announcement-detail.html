@@ -1,0 +1,61 @@
+<app-page-header
+  section="Employee portal"
+  title="Announcement Detail"
+  description="Review the full internal communication and complete any required action."
+/>
+
+@if (detail$ | async; as detail) {
+  @if (detail.announcement; as announcement) {
+    <div class="detail-actions">
+      <a mat-button routerLink="/employee/announcements"><mat-icon>arrow_back</mat-icon>Back to announcements</a>
+      @if (isDismissible(announcement)) {
+        <button mat-button type="button" (click)="dismiss(announcement)"><mat-icon>close</mat-icon>Dismiss</button>
+      }
+    </div>
+
+    @if (announcement.acknowledgementRequired) {
+      <section class="ack-panel" [class.complete]="detail.status?.acknowledgedAt">
+        <mat-icon aria-hidden="true">{{ detail.status?.acknowledgedAt ? 'verified' : 'fact_check' }}</mat-icon>
+        <div>
+          <strong>{{ detail.status?.acknowledgedAt ? 'Acknowledgement complete' : 'Acknowledgement required' }}</strong>
+          <p>{{ detail.status?.acknowledgedAt
+            ? 'Your acknowledgement has been recorded for this announcement.'
+            : 'Confirm that you have reviewed this communication.' }}</p>
+        </div>
+        @if (!detail.status?.acknowledgedAt) {
+          <button mat-flat-button type="button" (click)="acknowledge(announcement)">Acknowledge</button>
+        }
+      </section>
+    }
+
+    @if (actionMessage()) {
+      <div class="success-message" role="status"><mat-icon>check_circle</mat-icon>{{ actionMessage() }}</div>
+    }
+
+    <article class="detail-card">
+      <header>
+        <div class="labels">
+          <app-type-chip [type]="announcement.type" />
+          <app-priority-badge [priority]="announcement.priority" />
+          @if (!detail.status?.readAt) { <span class="unread-label"><span></span>Unread</span> }
+        </div>
+        <h2>{{ announcement.title }}</h2>
+        <p class="summary">{{ announcement.summary }}</p>
+        <div class="published"><mat-icon>calendar_today</mat-icon>Published {{ announcement.publishAt | date: 'MMMM d, y' }}</div>
+      </header>
+      <div class="body-copy"><p>{{ announcement.body }}</p></div>
+      <footer>
+        <span><mat-icon>visibility</mat-icon>{{ detail.status?.readAt ? 'Read' : 'Marking as read' }}</span>
+        @if (detail.status?.acknowledgedAt) {
+          <span><mat-icon>verified</mat-icon>Acknowledged {{ detail.status?.acknowledgedAt | date: 'MMM d, y' }}</span>
+        }
+      </footer>
+    </article>
+  } @else {
+    <section class="unavailable" role="status">
+      <mat-icon>notifications_off</mat-icon>
+      <div><strong>Announcement unavailable</strong><p>This announcement is no longer active or is not available for your employee profile.</p></div>
+      <a mat-stroked-button routerLink="/employee/announcements">Back to announcements</a>
+    </section>
+  }
+}

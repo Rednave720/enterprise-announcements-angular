@@ -1,0 +1,105 @@
+<app-page-header
+  section="Employee portal"
+  title="Employee Announcements"
+  description="Review current internal communications selected for your role, location, and work group."
+/>
+
+@if (feed$ | async; as feed) {
+  @if (feed.banners.length) {
+    <section class="banner-section" aria-label="Critical announcements">
+      @for (banner of feed.banners; track banner.id) {
+        <article class="critical-banner">
+          <div class="banner-icon" aria-hidden="true"><mat-icon>campaign</mat-icon></div>
+          <div class="banner-copy">
+            <span>Critical announcement</span>
+            <h2>{{ banner.title }}</h2>
+            <p>{{ banner.summary }}</p>
+          </div>
+          <div class="banner-actions">
+            @if (banner.acknowledgementRequired) {
+              <button mat-stroked-button type="button" (click)="acknowledge(banner)">
+                <mat-icon>fact_check</mat-icon>Acknowledge
+              </button>
+            }
+            <a mat-flat-button [routerLink]="['/employee/announcements', banner.id]">View details</a>
+          </div>
+        </article>
+      }
+    </section>
+  }
+
+  <section class="feed-toolbar" aria-label="Announcement filters">
+    <div>
+      <h2>Announcements for {{ feed.user.displayName }}</h2>
+      <p>{{ feed.items.length }} of {{ feed.eligibleCount }} active announcements</p>
+    </div>
+    <div class="filters">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Priority</mat-label>
+        <mat-select [formControl]="priorityControl" aria-label="Filter announcements by priority">
+          <mat-option value="ALL">All priorities</mat-option>
+          @for (priority of priorities; track priority) {
+            <mat-option [value]="priority">{{ label(priority) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Type</mat-label>
+        <mat-select [formControl]="typeControl" aria-label="Filter announcements by type">
+          <mat-option value="ALL">All types</mat-option>
+          @for (type of types; track type) { <mat-option [value]="type">{{ label(type) }}</mat-option> }
+        </mat-select>
+      </mat-form-field>
+      <button mat-button type="button" (click)="clearFilters()"><mat-icon>filter_alt_off</mat-icon>Clear</button>
+    </div>
+  </section>
+
+  @if (feed.items.length) {
+    <section class="announcement-list" aria-label="Active announcements">
+      @for (item of feed.items; track item.announcement.id) {
+        <article class="announcement-card" [class.unread]="item.isUnread">
+          <div class="unread-rail" aria-hidden="true"></div>
+          <div class="announcement-content">
+            <div class="card-meta">
+              <app-type-chip [type]="item.announcement.type" />
+              <app-priority-badge [priority]="item.announcement.priority" />
+              @if (item.isUnread) { <span class="unread-label"><span></span>Unread</span> }
+            </div>
+            <h3>{{ item.announcement.title }}</h3>
+            <p>{{ item.announcement.summary }}</p>
+            <div class="card-footer">
+              <span><mat-icon aria-hidden="true">calendar_today</mat-icon>{{ item.announcement.publishAt | date: 'MMM d, y' }}</span>
+              @if (item.announcement.acknowledgementRequired && !item.status?.acknowledgedAt) {
+                <span class="ack-label"><mat-icon aria-hidden="true">fact_check</mat-icon>Acknowledgement required</span>
+              }
+            </div>
+          </div>
+          <div class="card-actions">
+            @if (isDismissible(item.announcement)) {
+              <button mat-button type="button" (click)="dismiss(item.announcement)">
+                <mat-icon>close</mat-icon>Dismiss
+              </button>
+            }
+            <a mat-flat-button [routerLink]="['/employee/announcements', item.announcement.id]">View details</a>
+          </div>
+        </article>
+      }
+    </section>
+  } @else if (feed.eligibleCount === 0) {
+    <section class="empty-card">
+      <app-empty-state
+        icon="notifications_none"
+        title="No active announcements"
+        description="There are no current announcements for your employee profile."
+      />
+    </section>
+  } @else {
+    <section class="empty-card">
+      <app-empty-state
+        icon="filter_alt_off"
+        title="No announcements match your filters"
+        description="Clear or adjust the priority and type filters to view other active announcements."
+      />
+    </section>
+  }
+}
