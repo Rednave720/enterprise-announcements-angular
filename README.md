@@ -1,67 +1,96 @@
 # Internal Enterprise Announcements System
 
-## Project Overview
+An Angular-based internal communications workflow application designed to demonstrate enterprise frontend architecture, targeted publishing, lifecycle management, employee acknowledgement, and SQL-aware systems thinking.
 
-The Internal Enterprise Announcements System is an Angular portfolio project that models how an organization could create, target, publish, and display internal communications. It is designed as a professional internal portal rather than a social feed or marketing site.
+This is a portfolio MVP, not a production communications platform. It intentionally uses typed mock services instead of a backend so the project can focus on business workflow modeling, Angular Material implementation, route-based admin/employee experiences, and clean presentation.
 
-This project complements the Insurance Claims Management Portal by emphasizing Angular, TypeScript, Angular Material, enterprise frontend architecture, workflow design, and SQL-aware data planning.
+## Why This Project Matters
 
-## Portfolio Positioning
+Large organizations need structured ways to create, target, publish, and track internal communications. A simple announcement can involve business rules: who should see it, when it should go live, whether it needs acknowledgement, and how administrators review prior edits. This project models that workflow in a portfolio-sized way while showing how enterprise frontend applications separate admin operations from employee-facing experiences.
 
-The project supports Bryan Pierre's positioning as a Digital Systems Analyst / Business-Technologist focused on business systems, digital transformation, enterprise workflows, product thinking, UX awareness, analytics, and technical execution.
+## Business Problem
 
-## Phase Status
+Internal communication often becomes scattered across email, intranet pages, chat tools, and informal manager updates. This MVP explores a more structured workflow:
 
-Phase 1 established the frontend foundation:
+- communications managers create and manage announcements
+- targeted employees see only relevant active announcements
+- critical messages can be promoted into a banner
+- acknowledgement-required messages can be tracked through a lightweight status model
+- admins can review metadata and version history for audit context
 
-- Angular standalone application
-- TypeScript and SCSS
-- Angular Material and CDK
-- Responsive admin/employee application shell
-- Route-based workspace separation
-- Mock Admin/Employee role switching
-- Shared page-header and placeholder-page components
-- Custom Material theme and local design tokens
-- Basic route and shell tests
+## Roles
 
-Phase 2 added the data and service foundation:
+### Admin / Communications Manager
 
-- SQL-shaped announcement, audience, user-status, version-history, user, and reference-data models
-- Ten professional mock announcements spanning the planned statuses, priorities, and types
-- Audience targeting with OR logic within dimensions and AND logic across dimensions
-- Observable announcement, audience, user-status, mock-user, and reference-data services
-- Employee eligibility, banner visibility, dashboard summary, filtering, and lifecycle transition rules
-- Focused business-rule tests
+Admins create, edit, review, filter, and manage announcement records. Their experience focuses on operational visibility, content governance, targeting, schedule controls, display settings, and audit context.
 
-Phase 3 adds the first operational admin screens:
+### Employee
 
-- Responsive 3x2 dashboard summary sourced from the announcement service
-- Recently updated announcements table
-- Searchable and filterable announcement management table
-- Client-side pagination and responsive table scrolling
-- Distinct status, priority, and type labels
-- Audience descriptions built from typed targeting and reference data
-- Route-level lazy loading for the Material-heavy admin screens
+Employees view active announcements targeted to their mock profile. Their experience focuses on scanning current messages, reading details, dismissing eligible items, and acknowledging required communications.
 
-Phase 4 adds the admin authoring workflow:
+## Core Workflows
 
-- Shared reactive form for create and edit routes
-- Content, audience, schedule, and display-setting sections
-- Conditional banner, scheduling, date-range, and display-location validation
-- Live employee announcement preview
-- Service-backed announcement and audience saves
-- Lightweight read-only detail page with coherent Edit navigation
+- Admin dashboard summary and recently updated announcements
+- Announcement management table with search, filters, and pagination
+- Create/edit announcement form with reactive validation
+- Live employee-preview panel during authoring
+- Admin read-only announcement detail page
+- Lightweight version-history timeline
+- Employee announcement feed with priority/type filters
+- Critical banner and acknowledgement workflow
+- Employee read and dismiss behavior
 
-Phase 5 adds the employee-facing experience:
+## Feature List
 
-- Targeted employee announcement feed sourced from service eligibility rules
-- Critical/pinned banner area for urgent or acknowledgement-required messages
-- Priority and type filters with clear empty states
-- Employee announcement detail view
-- Read, dismiss, and acknowledgement actions stored through the user-status service
-- Route-level lazy loading for employee screens
+- Responsive Angular Material shell with admin and employee workspaces
+- Mock role switching between Admin and Employee modes
+- SQL-shaped announcement, audience, user-status, user, and version-history models
+- Observable service layer for all UI data access
+- Status, priority, and type label components
+- Audience targeting summaries
+- Reactive form validation for authoring rules
+- Service-backed create/update behavior
+- Employee eligibility and banner rules in the service layer
+- Final screenshot-ready admin and employee screens
 
-Version-history UI, backend integration, and persistence remain intentionally deferred.
+## Architecture
+
+The project uses standalone Angular components, route-level lazy loading, typed services, and reusable shared UI components. Components consume service observables rather than importing mock arrays directly.
+
+Key frontend areas:
+
+- `src/app/core/layout` - responsive shell, sidebar, topbar, and role switching
+- `src/app/core/data` - mock seed data shaped like relational records
+- `src/app/core/services` - mock user and reference data services
+- `src/app/features/announcements` - typed models and business services
+- `src/app/features/admin` - dashboard, table, form, detail, and version history
+- `src/app/features/employee` - feed and employee detail workflow
+- `src/app/shared/components` - page header, empty state, and label components
+
+## SQL-First Data Design
+
+Although this MVP does not include a database, the mock data is intentionally shaped like tables:
+
+- `Announcement`
+- `Audience`
+- `UserAnnouncementStatus`
+- `VersionHistory`
+- `MockUser`
+- reference tables for departments, roles, locations, and user groups
+
+This keeps the frontend easy to explain in interviews because the mock service layer could later map cleanly to REST APIs and relational tables.
+
+## Mock-Data Strategy
+
+The app uses professional demo data only. Mock records are designed to show realistic internal communications scenarios such as severe weather closure, information security policy acknowledgement, benefits reminders, IT maintenance, and manager training.
+
+The mock services demonstrate:
+
+- filtering and lifecycle rules
+- employee eligibility rules
+- banner visibility rules
+- read, dismiss, and acknowledgement state
+- lightweight version history
 
 ## Tech Stack
 
@@ -92,6 +121,21 @@ Version-history UI, backend integration, and persistence remain intentionally de
 
 The root route redirects to `/admin/dashboard`. Unknown routes display a not-found state inside the shared portal shell.
 
+## Screenshot Walkthrough
+
+Final screenshots are stored under `docs/screenshots/`.
+
+1. `01-admin-dashboard.png` - admin workload summary and recently updated announcements
+2. `02-announcements-management-table.png` - searchable/filterable announcement management table
+3. `03-create-announcement-form.png` - admin authoring workflow and form sections
+4. `04-announcement-preview.png` - live employee-facing preview during authoring
+5. `05-admin-announcement-detail.png` - read-only admin detail with metadata and display settings
+6. `06-version-history.png` - lightweight change history timeline
+7. `07-employee-announcements-feed.png` - targeted employee feed
+8. `08-critical-banner-acknowledgement.png` - critical banner and acknowledgement treatment
+9. `09-employee-announcement-detail.png` - employee detail/read/acknowledge experience
+10. `10-mobile-employee-feed.png` - mobile employee feed layout
+
 ## Visual Direction
 
 The shell uses Angular Material patterns inspired by [ng-matero](https://github.com/ng-matero/ng-matero), while restrained card and surface styling takes secondary inspiration from [Modernize Angular Free](https://github.com/adminmart/modernize-angular-free).
@@ -114,6 +158,8 @@ fnm install
 fnm use
 ```
 
+Install and run:
+
 ```bash
 npm install
 npm start
@@ -128,7 +174,7 @@ npm run build
 npm test -- --watch=false
 ```
 
-## MVP Exclusions
+## MVP Limitations
 
 The MVP does not include:
 
@@ -140,9 +186,16 @@ The MVP does not include:
 - Real analytics or charts
 - Rich text editing
 - File attachments
+- Comments, likes, reactions, or social features
 - Complex approval workflows
 - Template-provided dashboards or sample business domains
 
-## Next Phase
+## Future Backend Extension
 
-Phase 6 can polish the admin detail/version-history experience, tighten final screenshots, and prepare the project README/case-study materials before considering any backend integration.
+A future technical extension could add a Spring Boot or NestJS REST API, PostgreSQL persistence, authentication, role-based access control, audit logging, and deployment. Those items are intentionally excluded from the current MVP to keep the portfolio project focused and finishable.
+
+## Portfolio Positioning
+
+This project supports Bryan Pierre's positioning as a Digital Systems Analyst / Business-Technologist focused on business systems, digital transformation, enterprise workflows, product thinking, UX awareness, analytics, and technical execution.
+
+It complements the Insurance Claims Management Portal by showing Angular, TypeScript, enterprise frontend structure, workflow modeling, and SQL-aware data planning without turning into another full-stack backend project.

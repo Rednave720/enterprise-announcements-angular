@@ -11,6 +11,7 @@ import { PageHeader } from '../../../shared/components/page-header/page-header';
 import { PriorityBadge } from '../../../shared/components/priority-badge/priority-badge';
 import { StatusChip } from '../../../shared/components/status-chip/status-chip';
 import { TypeChip } from '../../../shared/components/type-chip/type-chip';
+import { MockUserService } from '../../../core/services/mock-user.service';
 import { Audience } from '../../announcements/models/announcement.models';
 import { AnnouncementsService } from '../../announcements/services/announcements.service';
 import { AudienceService } from '../../announcements/services/audience.service';
@@ -29,19 +30,37 @@ export class AnnouncementDetail {
   private readonly announcementsService = inject(AnnouncementsService);
   private readonly audienceService = inject(AudienceService);
   private readonly referenceDataService = inject(ReferenceDataService);
+  private readonly mockUserService = inject(MockUserService);
   readonly announcementId = this.route.snapshot.paramMap.get('id') ?? '';
 
   readonly detail$ = combineLatest([
     this.announcementsService.getAnnouncementById(this.announcementId),
     this.audienceService.getAudienceForAnnouncement(this.announcementId),
+    this.announcementsService.getAnnouncementVersions(this.announcementId),
     this.referenceDataService.getDepartments(),
     this.referenceDataService.getRoles(),
     this.referenceDataService.getLocations(),
     this.referenceDataService.getUserGroups(),
-  ]).pipe(map(([announcement, audience, departments, roles, locations, groups]) => ({
+  ]).pipe(map(([announcement, audience, versions, departments, roles, locations, groups]) => ({
     announcement,
     audience: this.formatAudience(audience, departments, roles, locations, groups),
+    createdBy: announcement ? this.userName(announcement.createdBy) : '',
+    lastEditedBy: announcement ? this.userName(announcement.lastEditedBy) : '',
+    hasVersionHistory: versions.length > 0,
+    acknowledgementCount: announcement?.acknowledgementRequired ? announcement.readCount : null,
   })));
+
+  displaySettings(announcement: {
+    showInBanner: boolean;
+    showInNotificationCenter: boolean;
+    acknowledgementRequired: boolean;
+  }): readonly { label: string; enabled: boolean; icon: string }[] {
+    return [
+      { label: 'Show in Banner', enabled: announcement.showInBanner, icon: 'campaign' },
+      { label: 'Notification Center', enabled: announcement.showInNotificationCenter, icon: 'notifications' },
+      { label: 'Acknowledgement Required', enabled: announcement.acknowledgementRequired, icon: 'fact_check' },
+    ];
+  }
 
   private formatAudience(
     audience: Audience | undefined,
@@ -60,5 +79,9 @@ export class AnnouncementDetail {
 
   private namesFor(ids: readonly string[], options: readonly ReferenceOption[]): string {
     return ids.map((id) => options.find((option) => option.id === id)?.name ?? id).join(', ');
+  }
+
+  private userName(userId: string): string {
+    return this.mockUserService.getUserById(userId)?.displayName ?? userId;
   }
 }

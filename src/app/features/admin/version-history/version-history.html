@@ -1,0 +1,92 @@
+<app-page-header
+  section="Audit history"
+  title="Version History"
+  description="Review lightweight change records for announcement content and publishing state."
+/>
+
+@if (history$ | async; as history) {
+  <div class="history-actions">
+    <a mat-button routerLink="/admin/announcements"><mat-icon>arrow_back</mat-icon>Announcements</a>
+    @if (history.announcement; as announcement) {
+      <a mat-stroked-button [routerLink]="['/admin/announcements', announcement.id]">
+        <mat-icon>article</mat-icon>Announcement Detail
+      </a>
+    }
+  </div>
+
+  @if (history.announcement; as announcement) {
+    <section class="summary-card">
+      <div>
+        <span class="eyebrow">Current Announcement</span>
+        <h2>{{ announcement.title }}</h2>
+        <p>{{ announcement.summary }}</p>
+      </div>
+      <div class="labels">
+        <app-type-chip [type]="announcement.type" />
+        <app-priority-badge [priority]="announcement.priority" />
+        <app-status-chip [status]="announcement.status" />
+      </div>
+    </section>
+
+    @if (history.versions.length) {
+      <section class="timeline" aria-label="Announcement version timeline">
+        @for (version of history.versions; track version.id) {
+          <article class="timeline-item">
+            <div class="marker" aria-hidden="true"><mat-icon>history</mat-icon></div>
+            <div class="version-card">
+              <header>
+                <div>
+                  <span class="eyebrow">Edited by {{ version.editedByName }}</span>
+                  <h3>{{ version.changeNote }}</h3>
+                </div>
+                <time>{{ version.editedAt | date: 'MMM d, y, h:mm a' }}</time>
+              </header>
+
+              <div class="previous-state">
+                <h4>Previous Snapshot</h4>
+                <dl>
+                  <div>
+                    <dt>Title</dt>
+                    <dd>{{ version.previousContent.title }}</dd>
+                  </div>
+                  <div>
+                    <dt>Summary</dt>
+                    <dd>{{ version.previousContent.summary }}</dd>
+                  </div>
+                  <div>
+                    <dt>Status</dt>
+                    <dd><app-status-chip [status]="version.previousContent.status" /></dd>
+                  </div>
+                  <div>
+                    <dt>Priority</dt>
+                    <dd><app-priority-badge [priority]="version.previousContent.priority" /></dd>
+                  </div>
+                  <div>
+                    <dt>Type</dt>
+                    <dd><app-type-chip [type]="version.previousContent.type" /></dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </article>
+        }
+      </section>
+    } @else {
+      <section class="empty-card">
+        <app-empty-state
+          icon="history_toggle_off"
+          title="No version history yet"
+          description="Change records will appear here when this announcement has saved revisions."
+        />
+      </section>
+    }
+  } @else {
+    <section class="empty-card" role="alert">
+      <app-empty-state
+        icon="error_outline"
+        title="Announcement not found"
+        description="Return to announcement management and choose an available record."
+      />
+    </section>
+  }
+}

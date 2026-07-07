@@ -5,6 +5,22 @@
   margin-bottom: 16px;
 }
 
+.detail-actions div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 20px;
+  align-items: start;
+}
+
+.content-card,
+.meta-card,
 .detail-card {
   background: var(--portal-surface);
   border: 1px solid var(--portal-border);
@@ -14,12 +30,14 @@
 
 .detail-header,
 .detail-body,
-dl {
+.audience-panel,
+.settings-grid {
   padding: 24px;
 }
 
 .detail-header,
-.detail-body {
+.detail-body,
+.audience-panel {
   border-bottom: 1px solid var(--portal-border);
 }
 
@@ -31,22 +49,117 @@ dl {
   margin-bottom: 18px;
 }
 
+h2,
+h3 {
+  margin: 0;
+  color: var(--portal-text);
+}
+
 h2 {
-  margin: 0 0 8px;
-  font-size: 1.5rem;
+  margin-bottom: 8px;
+  font-size: 1.65rem;
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: 1rem;
 }
 
 .detail-header p,
-.detail-body p {
-  margin: 0;
+.detail-body p,
+.audience-panel p,
+.context-note {
+  margin: 8px 0 0;
   color: var(--portal-text-muted);
   line-height: 1.65;
 }
 
+.audience-panel {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.panel-icon,
+.setting-item mat-icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  color: var(--portal-primary);
+  background: var(--portal-primary-soft);
+  border-radius: 8px;
+  place-items: center;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.setting-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  background: #f8fafc;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+}
+
+.setting-item.enabled {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.setting-item.enabled mat-icon {
+  color: #047857;
+  background: #dcfce7;
+}
+
+.setting-item strong,
+.setting-item span {
+  display: block;
+}
+
+.setting-item strong {
+  color: var(--portal-text);
+  font-size: 0.88rem;
+}
+
+.setting-item span {
+  margin-top: 3px;
+  color: var(--portal-text-muted);
+  font-size: 0.78rem;
+}
+
+.metadata-column {
+  display: grid;
+  gap: 16px;
+}
+
+.meta-card {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+}
+
+.status-card {
+  gap: 14px;
+}
+
+.eyebrow {
+  color: var(--portal-primary);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
 dl {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px 32px;
+  gap: 14px;
   margin: 0;
 }
 
@@ -57,8 +170,8 @@ dl div {
 
 dt {
   color: var(--portal-text-muted);
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.74rem;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
@@ -66,6 +179,36 @@ dd {
   margin: 0;
   color: var(--portal-text);
   line-height: 1.5;
+}
+
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metric-row div {
+  padding: 14px;
+  background: #f8fafc;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+}
+
+.metric-row span,
+.metric-row strong {
+  display: block;
+}
+
+.metric-row span {
+  color: var(--portal-text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.metric-row strong {
+  margin-top: 6px;
+  color: var(--portal-text);
+  font-size: 1.6rem;
 }
 
 .unavailable {
@@ -79,13 +222,41 @@ dd {
   margin-left: auto;
 }
 
+@media (max-width: 1100px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .metadata-column {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+  .metadata-column,
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 599px) {
   .detail-actions {
     align-items: stretch;
     flex-direction: column-reverse;
   }
 
-  dl {
-    grid-template-columns: 1fr;
+  .detail-actions div {
+    justify-content: stretch;
+  }
+
+  .detail-actions a {
+    justify-content: center;
+  }
+
+  .detail-header,
+  .detail-body,
+  .audience-panel,
+  .settings-grid {
+    padding: 18px;
   }
 }

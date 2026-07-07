@@ -31,14 +31,8 @@ export const routes: Routes = [
       },
       {
         path: 'admin/announcements/:id/history',
-        component: PlaceholderPage,
-        data: {
-          section: 'Audit history',
-          title: 'Version History',
-          description: 'Review a lightweight record of announcement changes.',
-          icon: 'history',
-          placeholder: 'Version snapshots and change notes arrive after the admin workflow is established.',
-        },
+        loadComponent: () => import('./features/admin/version-history/version-history')
+          .then((module) => module.VersionHistoryPage),
       },
       {
         path: 'admin/announcements/:id',

@@ -1,38 +1,123 @@
 <app-page-header
   section="Announcement management"
   title="Announcement Detail"
-  description="Review employee-facing content, targeting, and publishing configuration."
+  description="Review employee-facing content, targeting, display settings, and audit context."
 />
 
 @if (detail$ | async; as detail) {
   @if (detail.announcement; as announcement) {
     <div class="detail-actions">
-      <a mat-button routerLink="/admin/announcements"><mat-icon>arrow_back</mat-icon>Announcements</a>
-      <a mat-flat-button [routerLink]="['/admin/announcements', announcement.id, 'edit']">
-        <mat-icon>edit</mat-icon>Edit Announcement
-      </a>
+      <a mat-button routerLink="/admin/announcements"><mat-icon>arrow_back</mat-icon>Back to Announcements</a>
+      <div>
+        @if (detail.hasVersionHistory) {
+          <a mat-stroked-button [routerLink]="['/admin/announcements', announcement.id, 'history']">
+            <mat-icon>history</mat-icon>Version History
+          </a>
+        }
+        <a mat-flat-button [routerLink]="['/admin/announcements', announcement.id, 'edit']">
+          <mat-icon>edit</mat-icon>Edit Announcement
+        </a>
+      </div>
     </div>
 
-    <section class="detail-card">
-      <div class="detail-header">
-        <div class="labels">
-          <app-type-chip [type]="announcement.type" />
-          <app-priority-badge [priority]="announcement.priority" />
-          <app-status-chip [status]="announcement.status" />
+    <div class="detail-layout">
+      <section class="content-card" aria-labelledby="announcement-title">
+        <div class="detail-header">
+          <div class="labels">
+            <app-type-chip [type]="announcement.type" />
+            <app-priority-badge [priority]="announcement.priority" />
+            <app-status-chip [status]="announcement.status" />
+          </div>
+          <h2 id="announcement-title">{{ announcement.title }}</h2>
+          <p>{{ announcement.summary }}</p>
         </div>
-        <h2>{{ announcement.title }}</h2>
-        <p>{{ announcement.summary }}</p>
-      </div>
-      <div class="detail-body"><p>{{ announcement.body }}</p></div>
-      <dl>
-        <div><dt>Audience</dt><dd>{{ detail.audience }}</dd></div>
-        <div><dt>Publish Date</dt><dd>{{ announcement.publishAt ? (announcement.publishAt | date: 'MMM d, y') : 'Not scheduled' }}</dd></div>
-        <div><dt>Expiration Date</dt><dd>{{ announcement.expireAt ? (announcement.expireAt | date: 'MMM d, y') : 'No expiration' }}</dd></div>
-        <div><dt>Display</dt><dd>{{ announcement.showInBanner ? 'Banner' : '' }}{{ announcement.showInBanner && announcement.showInNotificationCenter ? ' and ' : '' }}{{ announcement.showInNotificationCenter ? 'Notification Center' : '' }}</dd></div>
-        <div><dt>Acknowledgement</dt><dd>{{ announcement.acknowledgementRequired ? 'Required' : 'Not required' }}</dd></div>
-        <div><dt>Last Edited</dt><dd>{{ announcement.updatedAt | date: 'MMM d, y' }}</dd></div>
-      </dl>
-    </section>
+
+        <div class="detail-body">
+          <h3>Employee Message</h3>
+          <p>{{ announcement.body }}</p>
+        </div>
+
+        <div class="audience-panel">
+          <span class="panel-icon" aria-hidden="true"><mat-icon>groups</mat-icon></span>
+          <div>
+            <h3>Audience Targeting</h3>
+            <p>{{ detail.audience }}</p>
+          </div>
+        </div>
+
+        <div class="settings-grid" aria-label="Display settings">
+          @for (setting of displaySettings(announcement); track setting.label) {
+            <div class="setting-item" [class.enabled]="setting.enabled">
+              <mat-icon>{{ setting.enabled ? setting.icon : 'block' }}</mat-icon>
+              <div>
+                <strong>{{ setting.label }}</strong>
+                <span>{{ setting.enabled ? 'Enabled' : 'Disabled' }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+      <aside class="metadata-column" aria-label="Announcement metadata">
+        <section class="meta-card status-card">
+          <span class="eyebrow">Current Status</span>
+          <app-status-chip [status]="announcement.status" />
+          <dl>
+            <div>
+              <dt>Publish Date</dt>
+              <dd>{{ announcement.publishAt ? (announcement.publishAt | date: 'MMM d, y') : 'Not scheduled' }}</dd>
+            </div>
+            <div>
+              <dt>Expiration Date</dt>
+              <dd>{{ announcement.expireAt ? (announcement.expireAt | date: 'MMM d, y') : 'No expiration' }}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="meta-card">
+          <h3>Ownership</h3>
+          <dl>
+            <div>
+              <dt>Created By</dt>
+              <dd>{{ detail.createdBy }}</dd>
+            </div>
+            <div>
+              <dt>Last Edited By</dt>
+              <dd>{{ detail.lastEditedBy }}</dd>
+            </div>
+            <div>
+              <dt>Created</dt>
+              <dd>{{ announcement.createdAt | date: 'MMM d, y' }}</dd>
+            </div>
+            <div>
+              <dt>Updated</dt>
+              <dd>{{ announcement.updatedAt | date: 'MMM d, y' }}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="meta-card">
+          <h3>Employee Context</h3>
+          <div class="metric-row">
+            <div>
+              <span>Read Count</span>
+              <strong>{{ announcement.readCount }}</strong>
+            </div>
+            <div>
+              <span>Total Audience</span>
+              <strong>{{ announcement.totalAudience }}</strong>
+            </div>
+          </div>
+          <p class="context-note">
+            @if (announcement.acknowledgementRequired) {
+              Acknowledgement is required. The current MVP tracks lightweight read and acknowledgement status through mock services.
+            } @else {
+              Acknowledgement is not required for this communication.
+            }
+          </p>
+        </section>
+      </aside>
+    </div>
   } @else {
     <section class="detail-card unavailable" role="alert">
       <mat-icon>error_outline</mat-icon><strong>Announcement not found</strong>
